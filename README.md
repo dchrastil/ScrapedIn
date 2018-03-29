@@ -22,8 +22,8 @@ this tool is for educational purposes only and violates LinkedIn.com's TOS. Use 
 
 ## Screenshots
 
-![alt tag](https://lh5.googleusercontent.com/Og8_HVL2sMhcw2Q20YTy5XxWF5-mZkJjFOtyG9CThVYhhT-yulm2Mv3zbo0OU4tNZInJCWeowmRwOF8=w3202-h1722-rw)
+![alt tag](https://s4.postimg.org/yj8wlmijh/Screen_Shot_2017_03_20_at_11_00_50_AM.png)
 
-![alt tag](https://lh4.googleusercontent.com/bFDcl7Iai3iEULLxRKX8MpGN0zdl_a5besT9MDpRq88L-REROKmPAhDV2jNVtMPxD4ucoMJDDFdWxvI=w3202-h1722-rw)
+![alt tag](https://s4.postimg.org/vu9izninx/Screen_Shot_2017_03_15_at_11_45_11_PM.png)
 
-![alt tag](https://lh6.googleusercontent.com/EqDaZcEFjWqHIkaHmhmJB3Ru2yzefebJVaxmFYuZ8S-r0r2daGkh5ehxvTrwaQaumnG_LY5Ua-iW59c=w3202-h1722-rw)
+![alt tag](https://s8.postimg.org/st0h8maxx/Screen_Shot_2017_03_20_at_11_04_00_AM.png)
