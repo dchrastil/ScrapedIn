@@ -9,7 +9,6 @@ ipaddress==1.0.17
 keyring==10.6.0
 keyrings.alt==3.0
 pycrypto==2.6.1
-pygobject==3.26.1
 pyxdg==0.25
 requests==2.18.4
 SecretStorage==2.3.1
