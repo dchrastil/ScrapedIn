@@ -30,4 +30,5 @@ this tool is for educational purposes only and violates LinkedIn.com's TOS. Use 
 
 ## How to install
 `sudo apt-get install python-pip -y`
+
 `sudo pip install -r requirements.txt`
