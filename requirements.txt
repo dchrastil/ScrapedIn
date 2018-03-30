@@ -1,4 +1,6 @@
 asn1crypto==0.24.0
+beautifulsoup4==4.6.0
+bs4==0.0.1
 certifi==2018.1.18
 chardet==3.0.4
 cryptography==2.1.4
