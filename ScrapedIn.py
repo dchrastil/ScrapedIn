@@ -57,7 +57,7 @@ def get_search():
     pages = data_total / 40
     if data_total % 40 == 0:
         # Becuase we count 0... Subtract a page if there are no left over results on the last page
-        pages += 1 
+        pages -= 1 
     if pages == 0: 
         pages = 1
     
