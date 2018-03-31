@@ -7,19 +7,30 @@ __description__ = "A recon tool that allows you to scrape profile search results
 __disclaimer__ = "This tool violates TOS of LinkedIn.com. For educational purposes only. Use at your own risk"
 __version__ = '2.0'
 
-import sys
-import re
-import time
-import xlsxwriter
-import json
+from __future__ import print_function
+
 import argparse
-import requests
-import subprocess
-import urllib
+import json
 import math
+import re
+import subprocess
+import sys
+import time
+try:                 # Python 3
+    from urllib.parse import quote_plus
+except ImportError:  # Python 2
+    from urllib import quote_plus
+
+import requests
+
+import xlsxwriter
 from thready import threaded
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
+try:
+    reload(sys)  # Python 2
+    sys.setdefaultencoding('utf-8')
+except NameError:
+    pass         # Python 3
 
 """ Setup Argument Parameters """
 parser = argparse.ArgumentParser(description='Discovery LinkedIn')
@@ -46,16 +57,16 @@ def get_search():
     pages = data_total / 40
     if data_total % 40 == 0:
         # Becuase we count 0... Subtract a page if there are no left over results on the last page
-        pages = pages - 1 
+        pages += 1 
     if pages == 0: 
         pages = 1
     
-    print "[Info] %i Results Found" % data_total
+    print("[Info] %i Results Found" % data_total)
     if data_total > 1000:
         pages = 24
-        print "[Notice] LinkedIn only allows 1000 results. Refine keywords to capture all data"
-    print "[Info] Fetching %i Pages" % pages
-    print
+        print("[Notice] LinkedIn only allows 1000 results. Refine keywords to capture all data")
+    print("[Info] Fetching %i Pages" % pages)
+    print()
    
     # Set record position for XLSX
     recordpos = 1
@@ -68,12 +79,12 @@ def get_search():
         #url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->%s)&origin=OTHER&q=guided&start=%i" % (p*40)
         #url = 'https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->75769)&keywords=%s&origin=GLOBAL_SEARCH_HEADER&q=guided&searchId=1489295486936&start=%i' % (search, p*40)
         #url = 'https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(facetGeoRegion-%%3Ear%%3A0)&keywords=%s&origin=GLOBAL_SEARCH_HEADER&q=guided&searchId=1489295486936&start=%i' % (search, p*40)
-        #print url
-        #print
+        #print(url)
+        #print()
         r = requests.get(url, cookies=cookies, headers=headers)
         content = r.text.encode('UTF-8')
         content = json.loads(content)
-        print "[Info] Fetching page %i with %i results" % (p+1,len(content['elements'][0]['elements']))
+        print("[Info] Fetching page %i with %i results" % (p+1,len(content['elements'][0]['elements'])))
         for c in content['elements'][0]['elements']:
             try:
                 if c['hitInfo']['com.linkedin.voyager.search.SearchProfile']['headless'] == False:
@@ -89,7 +100,7 @@ def get_search():
                     try:
                         data_picture = "https://media.licdn.com/mpr/mpr/shrinknp_400_400%s" % c['hitInfo']['com.linkedin.voyager.search.SearchProfile']['miniProfile']['picture']['com.linkedin.voyager.common.MediaProcessorImage']['id']
                     except:
-                        #print "[Notice] No picture found for %s %s, %s" % (data_firstname, data_lastname, data_occupation)
+                        #print("[Notice] No picture found for %s %s, %s" % (data_firstname, data_lastname, data_occupation))
                         data_picture = ""
                     
                     # Write data to XLSX file
@@ -107,9 +118,9 @@ def get_search():
                     # Increment Record Position
                     recordpos = recordpos + 1
                 else:
-                    print "[Notice] Headless profile found. Skipping"
+                    print("[Notice] Headless profile found. Skipping")
             except:
-                print "[Notice] Skipping"
+                print("[Notice] Skipping")
                 continue
         print
 
@@ -118,7 +129,7 @@ def authenticate():
         session = subprocess.Popen(['python', 'SI_login.py'], stdout=subprocess.PIPE).communicate()[0].replace("\n","")
         if len(session) == 0:
             sys.exit("[Error] Unable to login to LinkedIn.com")
-        print "[Info] Obtained new session: %s" % session
+        print("[Info] Obtained new session: %s" % session)
         cookies = dict(li_at=session)
     except Exception, e:
         sys.exit("[Fatal] Could not authenticate to linkedin. %s" % e)
@@ -134,15 +145,15 @@ _\ \ (__| | | (_| | |_) |  __/ (_| /\/ /_ | | | |
                   |_|                            
 tool to scrape linkedin v2.0
 """
-    print title.decode('UTF-8')
+    print(title.decode('UTF-8'))
     
     # Prompt user for data variables
     search = args.keywords if args.keywords!=None else raw_input("Enter search Keywords (use quotes for more percise results)\n")
     outfile = args.output if args.output!=None else raw_input("Enter filename for output (exclude file extension)\n")
-    print 
+    print()
     
     # URL Encode for the querystring
-    search = urllib.quote_plus(search)
+    search = quote_plus(search)
     cookies = authenticate()
     
     # Initiate XLSX File
