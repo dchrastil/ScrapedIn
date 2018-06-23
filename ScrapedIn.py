@@ -143,10 +143,9 @@ def authenticate():
         print "[Info] Obtained new session: %s" % cookies['li_at']
         li_cookie = dict(li_at=cookies['li_at'])
     except KeyError as k:
-        sys.stdout(k)
+        print k
         sys.exit('[Fatal] li_at cookie value not found')
     except Exception as e:
-        #sys.stdout(e)
         print e
         sys.exit("[Fatal] Could not authenticate to linkedin.")
     return li_cookie
