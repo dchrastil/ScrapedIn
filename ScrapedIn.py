@@ -17,7 +17,11 @@ import requests
 import subprocess
 import urllib
 import math
+import config
+
+from bs4 import BeautifulSoup
 from thready import threaded
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -27,18 +31,45 @@ parser.add_argument('-u', '--keywords', help='Keywords to search')
 parser.add_argument('-o', '--output', help='Output file (do not include extentions)')
 args = parser.parse_args()
 
-def get_search():
+
+def linkedIn(proxies=None):
+    s = requests.Session()
+    html = s.get("https://www.linkedin.com/", proxies=proxies)
+    soup = BeautifulSoup(html.text, "html.parser")
+    csrf = soup.find(id="loginCsrfParam-login")['value']
+    login_data = {
+        'session_key': config.linkedin['username'],
+        'session_password': config.linkedin['password'],
+        'loginCsrfParam': csrf,
+    }
+
+    logged_in = s.post("https://www.linkedin.com/uas/login-submit",
+                       data=login_data,
+                       proxies=proxies)
+    soup = BeautifulSoup(logged_in.text, "html.parser")
+    cookies = s.cookies
+    return cookies
+
+def get_search(search):
     # Fetch the initial page to get results/page counts
     #url = 'https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List()&keywords=%s&origin=GLOBAL_SEARCH_HEADER&q=guided&searchId=1489295486936&start=0' % search
-    url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v-%%3EPEOPLE,facetGeoRegion-%%3Ear%%3A0)&keywords=%s&origin=FACETED_SEARCH&q=guided&start=0" % search
+    #url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v-%%3EPEOPLE,facetGeoRegion-%%3Ear%%3A0)&keywords=%s&origin=FACETED_SEARCH&q=guided&start=0" % search
+    url = "https://www.linkedin.com/voyager/api/search/cluster"#?count=40&guides=List(v-%%3EPEOPLE,facetGeoRegion-%%3Ear%%3A0)&keywords=%s&origin=FACETED_SEARCH&q=guided&start=0" % search
     #url = 'https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->31752)&origin=GLOBAL_SEARCH_HEADER&q=guided&start=0'
     #url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->31752)&origin=OTHER&q=guided&start=0"
     #url = 'https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B"75769"%5D'
-    
+    params = {
+        'count': 40,
+        'guides': 'List(v-%>PEOPLE,facetGeoRegion-%>ar%:0)',
+        'keywords': search,
+        'origin': 'FACETED_SEARCH',
+        'q': 'guided',
+        'start': 0
+    }
     headers = {'Csrf-Token':'ajax:7736867257193100830'}
     cookies['JSESSIONID'] = 'ajax:7736867257193100830'
     cookies['X-RestLi-Protocol-Version'] = '2.0.0' 
-    r = requests.get(url, cookies=cookies, headers=headers)
+    r = requests.get(url, cookies=cookies, headers=headers, params=params)
     content = json.loads(r.text)
     data_total = content['paging']['total']
     
@@ -62,15 +93,8 @@ def get_search():
 
     for p in range(pages):
         # Request results for each page using the start offset
-        url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List()&keywords=%s&origin=GLOBAL_SEARCH_HEADER&q=guided&searchId=1489295486936&start=%i" % (search, p*40)
-        url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v-%%3EPEOPLE,facetGeoRegion-%%3Ear%%3A0)&keywords=%s&origin=FACETED_SEARCH&q=guided&start=%i" % (search, p*40)
-        #url = 'https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->31752)&origin=GLOBAL_SEARCH_HEADER&q=guided&start=%i' % (p*40)
-        #url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->%s)&origin=OTHER&q=guided&start=%i" % (p*40)
-        #url = 'https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->75769)&keywords=%s&origin=GLOBAL_SEARCH_HEADER&q=guided&searchId=1489295486936&start=%i' % (search, p*40)
-        #url = 'https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(facetGeoRegion-%%3Ear%%3A0)&keywords=%s&origin=GLOBAL_SEARCH_HEADER&q=guided&searchId=1489295486936&start=%i' % (search, p*40)
-        #print url
-        #print
-        r = requests.get(url, cookies=cookies, headers=headers)
+        params['start'] = p
+        r = requests.get(url, cookies=cookies, headers=headers, params=params)
         content = r.text.encode('UTF-8')
         content = json.loads(content)
         print "[Info] Fetching page %i with %i results" % (p+1,len(content['elements'][0]['elements']))
@@ -115,14 +139,16 @@ def get_search():
 
 def authenticate():
     try:
-        session = subprocess.Popen(['python', 'SI_login.py'], stdout=subprocess.PIPE).communicate()[0].replace("\n","")
-        if len(session) == 0:
-            sys.exit("[Error] Unable to login to LinkedIn.com")
-        print "[Info] Obtained new session: %s" % session
-        cookies = dict(li_at=session)
-    except Exception, e:
-        sys.exit("[Fatal] Could not authenticate to linkedin. %s" % e)
-    return cookies
+        cookies = linkedIn()
+        print "[Info] Obtained new session: %s" % cookies['li_at']
+        li_cookie = dict(li_at=cookies['li_at'])
+    except KeyError as k:
+        print k
+        sys.exit('[Fatal] li_at cookie value not found')
+    except Exception as e:
+        print e
+        sys.exit("[Fatal] Could not authenticate to linkedin.")
+    return li_cookie
 
 if __name__ == '__main__':
     title = """
@@ -142,7 +168,7 @@ tool to scrape linkedin v2.0
     print 
     
     # URL Encode for the querystring
-    search = urllib.quote_plus(search)
+    #search = urllib.quote_plus(search)
     cookies = authenticate()
     
     # Initiate XLSX File
@@ -153,7 +179,7 @@ tool to scrape linkedin v2.0
     worksheet2.set_column(1,2, 75)
     
     # Initialize Scraping
-    get_search()
+    get_search(search)
 
     # Close XLSD File
     workbook.close()
