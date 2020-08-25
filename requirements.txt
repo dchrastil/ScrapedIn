@@ -10,7 +10,7 @@ keyring==10.6.0
 keyrings.alt==3.0
 pycrypto==2.6.1
 pyxdg==0.25
-requests==2.18.4
+requests==2.20.0
 SecretStorage==2.3.1
 six==1.11.0
 threaded==1.0.0
