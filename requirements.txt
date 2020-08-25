@@ -16,5 +16,5 @@ six==1.11.0
 threaded==1.0.0
 thready==0.1.5
 typing==3.6.4
-urllib3==1.22
+urllib3==1.24.2
 XlsxWriter==1.0.2
