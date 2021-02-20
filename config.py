@@ -5,8 +5,8 @@
 # account to avoid account suspension
 
 linkedin = dict(
-    username = '',
-    password = '',
+    username=None,
+    password=None,
 )
 
 ## [PROXY LIST] ##
@@ -15,9 +15,8 @@ linkedin = dict(
 # blocked for sending too much traffic
 
 proxylist = []
-#proxylist.append('http://127.0.0.1:8080')
+# proxylist.append('http://127.0.0.1:8080')
 
 ## [MISCELLANEOUS] ##
 
 timeout = 10
-
