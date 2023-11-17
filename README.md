@@ -36,13 +36,20 @@ this tool is for educational purposes only and violates LinkedIn.com's TOS. Use 
 
 ## Screenshots
 
-![alt tag](https://s18.postimg.org/nh7dtdkux/Screen_Shot_2018-03-29_at_7.09.04_AM.png)
+![alt tag](screenshots/Screenshot_1.png)
 
-![alt tag](https://s4.postimg.org/vu9izninx/Screen_Shot_2017_03_15_at_11_45_11_PM.png)
+![alt tag](screenshots/Screenshot_2.png)
 
-![alt tag](https://s8.postimg.org/st0h8maxx/Screen_Shot_2017_03_20_at_11_04_00_AM.png)
+![alt tag](screenshots/Screenshot_3.png)
+
+![alt tag](screenshots/Screenshot_4.png)
 
 ## How to install
 `sudo apt-get install python-pip -y`
 
 `sudo pip install -r requirements.txt`
+
+## How to build
+```shell
+pyinstaller --onefile ScrapedIn.py
+```
