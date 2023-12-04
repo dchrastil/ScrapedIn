@@ -22,7 +22,7 @@ export LI_PASSWORD={password}
 
 `python3 ScrapedIn.py`
 
-[ScrapedIn Demo.webm](https://github.com/dchrastil/ScrapedIn/assets/26440487/8827d331-5931-43c3-85d6-ec5cc9d6ddf5)
+[ScrapedIn Demo.webm](https://github.com/dchrastil/ScrapedIn/assets/26440487/6f7888f9-2fe3-49d7-b6a3-229e508a9da3)
 
 ![ScrapedIn_running](https://github.com/dchrastil/ScrapedIn/assets/26440487/dc99742e-0b73-4aa7-ae1c-34ee6ab1eb25)
 
