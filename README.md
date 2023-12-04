@@ -13,6 +13,16 @@ Output is stored as an XLSX file, however it is intended to be used with Google 
 
 ![ScrapedIn_report](https://github.com/dchrastil/ScrapedIn/assets/26440487/ac563397-391d-4059-89df-cb7305b6163a)
 
+## How to install
+`sudo apt-get install python3-pip -y`
+`sudo pip install -r requirements.txt`
+
+## How to run
+
+`export LI_USERNAME={username}`
+`export LI_PASSWORD={password}`
+
+`python3 ScrapedIn.py`
 
 # Sponsorship
 [<img src="proxycurl.png" width=350>](https://nubela.co/proxycurl?utm_campaign=influencer_marketing&utm_source=github&utm_medium=social&utm_content=daniel_chrastil_scrapedin)
@@ -45,7 +55,4 @@ Output is stored as an XLSX file, however it is intended to be used with Google 
 ### Disclaimer
 this tool is for educational purposes only and violates LinkedIn.com's TOS. Use at your own risk.
 
-## How to install
-`sudo apt-get install python3-pip -y`
 
-`sudo pip install -r requirements.txt`
