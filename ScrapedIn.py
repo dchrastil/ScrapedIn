@@ -292,8 +292,8 @@ def authenticate():
     print(colored("[Info] ","green"), colored("Initiating...", "white"))
     
     # Grab these from config or env variables
-    username = os.environ.get("LI-USERNAME", "")
-    password = os.environ.get("LI-PASSWORD", "")
+    username = os.environ.get("LI_USERNAME", "")
+    password = os.environ.get("LI_PASSWORD", "")
 
     # Build request data
     url = "https://www.linkedin.com/checkpoint/lg/login-submit"
@@ -309,13 +309,17 @@ def authenticate():
     r = requests.post(url, postdata, cookies=cookies, allow_redirects=False)
 
     # LinkedIn Session Key
-    session = r.cookies['li_at']
-    if(session):
-        print(colored("[Info] ","green"), colored("Obtained new session: %s...\n" % session[0:25],"white"))
-        cookie = {'li_at': session}
-        return cookie
-    else:
-        sys.exit("[Fatal] Could not authenticate to linkedin. %s" % e)
+    try:
+        session = r.cookies['li_at']
+        if(session):
+            print(colored("[Info] ","green"), colored("Obtained new session: %s...\n" % session[0:25],"white"))
+            cookie = {'li_at': session}
+            return cookie
+        else:
+            sys.exit("[Fatal] Could not authenticate to linkedin. Set credentials in your environment variables.")
+    except:
+        sys.exit("[Fatal] Could not authenticate to linkedin. Set credentials in your environment variables.")
+
 
 
 if __name__ == '__main__':
