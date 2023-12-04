@@ -9,6 +9,10 @@ Output is stored as an XLSX file, however it is intended to be used with Google 
 
 [ScrapedIn Demo.webm](https://github.com/dchrastil/ScrapedIn/assets/26440487/8827d331-5931-43c3-85d6-ec5cc9d6ddf5)
 
+![ScrapedIn_running](https://github.com/dchrastil/ScrapedIn/assets/26440487/dc99742e-0b73-4aa7-ae1c-34ee6ab1eb25)
+
+![ScrapedIn_report](https://github.com/dchrastil/ScrapedIn/assets/26440487/ac563397-391d-4059-89df-cb7305b6163a)
+
 
 # Sponsorship
 [<img src="proxycurl.png" width=350>](https://nubela.co/proxycurl?utm_campaign=influencer_marketing&utm_source=github&utm_medium=social&utm_content=daniel_chrastil_scrapedin)
