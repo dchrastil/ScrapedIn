@@ -8,7 +8,6 @@ idna==2.6
 ipaddress==1.0.17
 keyring==10.6.0
 keyrings.alt==3.0
-pycrypto==2.6.1
 pyxdg==0.26
 requests==2.31.0
 SecretStorage==2.3.1
